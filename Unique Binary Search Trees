@@ -1,0 +1,19 @@
+https://leetcode.com/problems/unique-binary-search-trees/
+
+func catalanNum(n int) int {
+    if n <= 1 {
+        return 1
+    }
+
+    var res int
+    for i := 0; i < n; i++{
+        res += catalanNum(i) * catalanNum(n - i - 1)
+    }
+
+    return res
+}
+
+
+func numTrees(n int) int {
+    return catalanNum(n)
+}
