@@ -1,0 +1,42 @@
+https://www.naukri.com/code360/problems/prim-s-mst_1095633
+
+#include <bits/stdc++.h> 
+vector<pair<pair<int, int>, int>> calculatePrimsMST(int n, int m, vector<pair<pair<int, int>, int>> &g)
+{
+    // Write your code here.
+
+    vector<vector<pair<int,int>>> adj(n+1,vector<pair<int,int>>());
+    for(auto p: g){
+        adj[p.first.first].push_back({p.first.second, p.second});
+        adj[p.first.second].push_back({p.first.first, p.second});
+    }
+
+    vector<int> visited(n+1, 0);
+    vector<pair<pair<int,int>,int>> result;
+    priority_queue<pair<int,pair<int,int>>, 
+                    vector<pair<int,pair<int,int>>>, 
+                    greater<pair<int,pair<int,int>>>> pq;
+
+    
+    pq.push({0,{1,-1}});
+
+    while(!pq.empty()){
+        auto edge = pq.top();
+        int wt = edge.first, node = edge.second.first, parent = edge.second.second;
+        pq.pop();
+        
+        if(!visited[node]){
+            visited[node] = 1;
+            if(parent != -1){
+                result.push_back({{parent, node},wt});
+            }
+            for(auto p: adj[node]){
+                if(p.first != parent or !visited[p.first]){
+                    pq.push({p.second,{p.first,node}});
+                }
+            }
+        }
+    }
+    
+    return result;
+}

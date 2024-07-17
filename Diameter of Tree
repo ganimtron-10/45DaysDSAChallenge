@@ -1,0 +1,26 @@
+https://leetcode.com/problems/diameter-of-binary-tree/
+
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+
+func diameterLength(root *TreeNode, ans *int) int {
+    if root == nil {
+        return 0
+    }
+    left := diameterLength(root.Left, ans)
+    right := diameterLength(root.Right, ans)
+    *ans = max(*ans, left + 1 + right)
+    return 1 + max(left, right)
+}
+
+func diameterOfBinaryTree(root *TreeNode) int {
+    var ans int
+    diameterLength(root, &ans)
+    return ans-1
+}
