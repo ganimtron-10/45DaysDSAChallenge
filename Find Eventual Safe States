@@ -1,0 +1,36 @@
+https://leetcode.com/problems/find-eventual-safe-states/
+
+func dfs(i int, graph [][]int, visited, pathVisited []bool, safeStates *[]int) bool {
+    visited[i] = true;
+    pathVisited[i] = true;
+
+    for _ ,child := range(graph[i]) {
+        if !visited[child] {
+            if !dfs(child, graph, visited, pathVisited, safeStates) {
+                return false
+            }
+        }else if pathVisited[child] {
+            return false
+        }
+    }
+
+    *safeStates = append(*safeStates, i)
+    pathVisited[i] = false
+    return true
+}
+
+func eventualSafeNodes(graph [][]int) []int {
+    v := len(graph)
+    visited := make([]bool, v+1)
+    pathVisited := make([]bool, v+1)
+    var safeStates []int
+
+    for i := 0; i < v; i++ {
+        if !visited[i] {
+            dfs(i, graph, visited, pathVisited, &safeStates)
+        }
+    }
+
+    sort.Ints(safeStates)
+    return safeStates
+}
