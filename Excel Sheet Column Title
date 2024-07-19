@@ -1,0 +1,15 @@
+tps://leetcode.com/problems/excel-sheet-column-title/
+
+func convertToTitle(columnNumber int) string {
+    if columnNumber < 1 {
+        return ""
+    }
+    if columnNumber <= 26 {
+        return string(rune('A' + columnNumber - 1))
+    }
+
+    if columnNumber > 26 && columnNumber%26 == 0 {
+        return convertToTitle((columnNumber/26)-1) + "Z"
+    }
+    return convertToTitle(columnNumber/26) + convertToTitle(columnNumber%26)
+}
