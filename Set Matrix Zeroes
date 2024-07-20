@@ -1,0 +1,45 @@
+// https://leetcode.com/problems/set-matrix-zeroes/
+
+func setZeroes(matrix [][]int)  {
+    var row = 1;
+    for i := 0; i < len(matrix); i++ {
+        for j := 0; j < len(matrix[i]); j++ {
+            if matrix[i][j] == 0 {
+                if(i == 0) {
+                    row = 0
+                }else{
+                    matrix[0][j] = 0
+                    matrix[i][0] = 0
+                }
+            }
+        }
+    }
+
+    for i := len(matrix) - 1; i > 0; i-- {
+        if matrix[i][0] == 0 {
+            for k := len(matrix[i]) - 1; k > 0; k-- {
+                matrix[i][k] = 0
+            }
+        }
+    }
+
+    for i := len(matrix[0]) - 1; i > 0; i-- {
+        if matrix[0][i] == 0 {
+            for k := len(matrix) - 1; k > 0; k-- {
+                matrix[k][i] = 0
+            }
+        }
+    }
+
+    if matrix[0][0] == 0 {
+        for k := len(matrix) - 1 ; k >= 0; k-- {
+            matrix[k][0] = 0
+        }
+    }
+
+    if row == 0 {
+        for k := len(matrix[0]) - 1; k >= 0; k-- {
+            matrix[0][k] = 0
+        }
+    }
+}

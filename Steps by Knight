@@ -1,0 +1,87 @@
+// https://www.geeksforgeeks.org/problems/steps-by-knight5927/1
+
+//{ Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+// } Driver Code Ends
+
+class Solution
+{
+
+    bool isValid(pair<int, int> p, int N, vector<vector<int>> visited)
+    {
+        if (p.first > 0 and p.first <= N && p.second > 0 and p.second <= N and !visited[p.first][p.second])
+        {
+            return true;
+        }
+        return false;
+    }
+
+public:
+    // Function to find out minimum steps Knight needs to reach target position.
+    int minStepToReachTarget(vector<int> &KnightPos, vector<int> &TargetPos, int N)
+    {
+        // Code here
+
+        if (KnightPos[0] == TargetPos[0] && KnightPos[1] == TargetPos[1])
+        {
+            return 0;
+        }
+
+        queue<pair<pair<int, int>, int>> q;
+        vector<vector<int>> visited(N + 1, vector<int>(N + 1, 0));
+
+        q.push({{KnightPos[0], KnightPos[1]}, 0});
+        visited[KnightPos[0]][KnightPos[1]] = 1;
+
+        vector<pair<int, int>> offsets = {{-2, 1}, {2, 1}, {-2, -1}, {2, -1}, {-1, 2}, {-1, -2}, {1, -2}, {1, 2}};
+
+        while (!q.empty())
+        {
+            int qSize = q.size();
+            while (qSize != 0)
+            {
+                pair<pair<int, int>, int> cur = q.front();
+                q.pop();
+
+                for (auto p : offsets)
+                {
+                    pair<int, int> nextPos = {cur.first.first + p.first, cur.first.second + p.second};
+                    if (isValid(nextPos, N, visited))
+                    {
+                        if (nextPos.first == TargetPos[0] && nextPos.second == TargetPos[1])
+                        {
+                            return cur.second + 1;
+                        }
+                        visited[nextPos.first][nextPos.second] = 1;
+                        q.push({nextPos, cur.second + 1});
+                    }
+                }
+                qSize--;
+            }
+        }
+        return 0;
+    }
+};
+
+//{ Driver Code Starts.
+int main()
+{
+    int tc;
+    cin >> tc;
+    while (tc--)
+    {
+        vector<int> KnightPos(2);
+        vector<int> TargetPos(2);
+        int N;
+        cin >> N;
+        cin >> KnightPos[0] >> KnightPos[1];
+        cin >> TargetPos[0] >> TargetPos[1];
+        Solution obj;
+        int ans = obj.minStepToReachTarget(KnightPos, TargetPos, N);
+        cout << ans << "\n";
+    }
+    return 0;
+}
+// } Driver Code Ends
