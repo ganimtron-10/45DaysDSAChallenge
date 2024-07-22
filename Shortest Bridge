@@ -1,0 +1,78 @@
+// https://leetcode.com/problems/shortest-bridge/
+
+func isValid(x, y int, grid *[][]int, visited *[][]bool) bool {
+    if x >= 0 && x < len(*grid) && y >= 0 && y < len((*grid)[0]) && (*grid)[x][y] == 1 && !(*visited)[x][y] {
+        return true
+    }
+    return false
+}
+
+
+func dfs(grid *[][]int, x, y int, visited *[][]bool, q *[][]int) {
+    // fmt.Println(x,y)
+    (*visited)[x][y] = true;
+    *q = append(*q, []int{x,y})
+
+    offsets := [][]int{{1,0},{-1,0},{0,1},{0,-1}}
+    for _,offset := range offsets{
+        nextPosx := x + offset[0]
+        nextPosy := y + offset[1]
+
+        if(isValid(nextPosx,nextPosy, grid, visited)){
+            // fmt.Println(nextPosx, nextPosy)
+            dfs(grid, nextPosx, nextPosy, visited, q)
+        }
+    }
+}
+
+func bfs(grid *[][]int, q *[][]int, visited *[][]bool) int {
+    cnt := 0
+    offsets := [][]int{{1,0},{-1,0},{0,1},{0,-1}}
+    
+    for len(*q) != 0 {
+        qSize := len(*q)
+        for qSize != 0 {
+            curx, cury := (*q)[0][0], (*q)[0][1]
+            *q = (*q)[1:]
+            for _,offset := range offsets{
+                x := curx + offset[0]
+                y := cury + offset[1]
+                if x >= 0 && x < len(*grid) && y >= 0 && y < len((*grid)[0]) && !(*visited)[x][y]{
+                    if (*grid)[x][y] == 1 {
+                        return cnt
+                    }
+                    *q = append(*q, []int{x,y})
+                    (*visited)[x][y] = true
+
+                    // fmt.Println(q)
+                }
+            }
+            qSize--
+        }
+        cnt++
+    }
+    return cnt
+}
+
+func shortestBridge(grid [][]int) int {
+
+    var q [][]int
+    visited := make([][]bool, len(grid))
+    for i:=0; i < len(grid); i++{
+        visited[i] = make([]bool, len(grid[0]))
+    }
+    // fmt.Println(visited)
+
+    out:
+    for i,row := range grid {
+        for j,val := range row {
+            // fmt.Println(i, row, j, val)
+            if(val == 1){
+                dfs(&grid, i,j, &visited, &q)
+                break out
+            }
+        }
+    }
+
+    return bfs(&grid, &q, &visited)
+}
