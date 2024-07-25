@@ -1,0 +1,18 @@
+https://leetcode.com/problems/find-the-duplicate-number/
+
+func findDuplicate(nums []int) int {
+    
+    hsh := make([]bool, len(nums))
+
+    // fmt.Println(hsh)
+
+    for _,ele := range nums {
+        if hsh[ele] {
+            return ele
+        } else {
+            hsh[ele] = true
+        }
+    }
+
+    return -1
+}

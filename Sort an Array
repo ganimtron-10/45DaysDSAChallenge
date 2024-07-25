@@ -1,0 +1,45 @@
+https://leetcode.com/problems/sort-an-array/
+
+func merge(pnums *[]int, l, mid, h int){
+    nums := *pnums
+    p1, p2 := l, mid+1
+    var temp []int
+
+    for p1 < mid+1 && p2 < h+1 {
+        if nums[p1] <= nums[p2] {
+            temp = append(temp, nums[p1])
+            p1++
+        }else{
+            temp = append(temp, nums[p2])
+            p2++
+        }
+    }
+
+    for p1 < mid+1 {
+        temp = append(temp, nums[p1])
+        p1++
+    }
+    for p2 < h+1 {
+        temp = append(temp, nums[p2])
+        p2++
+    }
+
+    for i:=l; i<=h; i++ {
+        nums[i] = temp[i-l]
+    }
+}
+
+func mergeSort(pnums *[]int, l, h int){
+    if(l < h){
+        mid := (l+h)/2
+
+        mergeSort(pnums, l, mid)
+        mergeSort(pnums, mid+1, h)
+        merge(pnums, l, mid, h)
+    }
+}
+
+func sortArray(nums []int) []int {
+    mergeSort(&nums, 0, len(nums)-1)
+    return nums
+}
