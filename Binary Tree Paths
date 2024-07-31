@@ -1,0 +1,38 @@
+https://leetcode.com/problems/binary-tree-paths/
+
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+
+func exploreAllPaths(root *TreeNode, allPaths *[]string, s *string){
+    if root == nil {
+        return
+    }
+
+    temp := *s
+    if *s != "" {
+        *s += "->"
+    }
+    *s += strconv.Itoa(root.Val)
+
+    if root.Left == nil && root.Right == nil{
+        *allPaths = append(*allPaths, *s)
+        *s = temp
+        return
+    }
+    exploreAllPaths(root.Left, allPaths, s)
+    exploreAllPaths(root.Right, allPaths, s)
+    *s = temp
+}
+
+func binaryTreePaths(root *TreeNode) []string {
+    var allPaths []string
+    s := ""
+    exploreAllPaths(root, &allPaths, &s)
+    return allPaths
+}
